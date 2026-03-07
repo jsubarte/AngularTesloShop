@@ -11,7 +11,7 @@ export const routes: Routes = [
         console.log('Hola mundo desde app.routes')
         return true
       }, */
-      NotAuthenticatedGuard,
+      NotAuthenticatedGuard
     ]
   },
   {

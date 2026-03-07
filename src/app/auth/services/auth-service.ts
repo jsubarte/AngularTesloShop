@@ -37,6 +37,8 @@ export class AuthService {
 
   token = computed< string | null >( () => this._token() )
 
+  isAdmin = computed( () => this._user()?.roles.includes('admin') ?? false)
+
   login( email: string, password: string ): Observable<boolean>{
     return this.http.post<IAuthResponse>(`${ BASEURL }/auth/login`, { email, password })
       .pipe(
