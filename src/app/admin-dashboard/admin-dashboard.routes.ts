@@ -15,11 +15,11 @@ const adminDashboardRoutes: Routes = [
     children: [
       {
         path: 'products',
-        component: ProductAdminPage
+        component: ProductsAdminPage
       },
       {
-        path: 'product/:id',
-        component: ProductsAdminPage
+        path: 'products/:id',
+        component: ProductAdminPage
       },
       {
         path: '**',
