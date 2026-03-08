@@ -34,7 +34,19 @@ export class ProductsService {
   }
 
   getProductByIdSlug( idSlug: string ): Observable<IProduct>{
+    //if(this.productCache.has(idSlug)) return of(this.productCache.get(idSlug))
     return this.http.get<IProduct>(`${ BASEURL }/products/${ idSlug }`)
+      /* .pipe(
+        tap( product => this.productCache.set( idSlug, product ) )
+      ) */
+  }
+
+  getProductById(id: string): Observable<IProduct> {
+    //if(this.productCache.has(id)) return of(this.productCache.get(id))
+    return this.http.get<IProduct>(`${ BASEURL }/products/${ id }`)
+      /* .pipe(
+        tap( product => this.productCache.set( id, product ) )
+      ) */
   }
 
 }
