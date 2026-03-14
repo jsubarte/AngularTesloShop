@@ -2,11 +2,12 @@ import { Component, inject, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { ProductTable } from "@products/components/product-table/product-table";
 import { ProductsService } from '@products/services/products-service';
+import { RouterLink } from "@angular/router";
 
 
 @Component({
   selector: 'products-admin-page',
-  imports: [ProductTable],
+  imports: [ProductTable, RouterLink],
   templateUrl: './products-admin-page.html',
 })
 export class ProductsAdminPage {

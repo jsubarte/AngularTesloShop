@@ -20,7 +20,7 @@ interface IProduct {
   user:        IUser;
 }
 
-enum Gender {
+export enum Gender {
   Kid = "kid",
   Men = "men",
   Unisex = "unisex",
