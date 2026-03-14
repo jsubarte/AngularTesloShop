@@ -9,8 +9,9 @@
       "@auth/*": ["./src/app/auth/*"],
       "@dashboard/*": ["./src/app/dashboard/*"],
       "@products/*": ["./src/app/products/*"],
+      "@shared/*": ["./src/app/shared/*"],
       "@store-front/*": ["./src/app/store-front/*"],
-      "@shared/*": ["./src/app/shared/*"]
+      "@utils/*": ["./src/app/utils/*"]
     },
     "strict": true,
     "noImplicitOverride": true,
