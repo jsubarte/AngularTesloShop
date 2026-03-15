@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { IUser } from '@auth/interfaces/iuser';
 import { Gender, IProduct, IProductsResponse } from '@products/interfaces/iproduct';
-import { Observable, of } from 'rxjs';
+import { forkJoin, map, Observable, of, switchMap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 
@@ -65,18 +65,26 @@ export class ProductsService {
       ) */
   }
 
-  createProduct( productLike: Partial<IProduct> ): Observable<IProduct> {
+  createProduct( productLike: Partial<IProduct>, imageFileList?: FileList ): Observable<IProduct> {
     return this.http.post<IProduct>(`${ BASEURL }/products`, productLike)
       /* .pipe(
         tap( product => this.updateProductCache(product) )
       ) */
   }
 
-  updateProduct(id: string, productLike: Partial<IProduct>): Observable<IProduct>{
-    return this.http.patch<IProduct>(`${ BASEURL }/products/${ id }`, productLike )
-      /* .pipe(
-        tap( product => this.updateProductCache(product) )
-      ) */
+  updateProduct(id: string, productLike: Partial<IProduct>, imageFileList?: FileList): Observable<IProduct>{
+    const currentImages = productLike.images ?? []
+    return this.uploadImages( imageFileList )
+      .pipe(
+        map( imageName => ({
+          ...productLike,
+          images: [ ...currentImages, ...imageName ]
+        })),
+        switchMap(
+          updatedProduct => this.http.patch<IProduct>(`${ BASEURL }/products/${ id }`, updatedProduct )
+        ),
+        //tap( product => this.updateProductCache(product) )
+      )
   }
 
   /* updateProductCache( product: IProduct ){
@@ -93,5 +101,27 @@ export class ProductsService {
     )
 
   } */
+
+  uploadImages( images?: FileList ): Observable<string[]>{
+    if( !images ) return of([])
+
+    const uploadObservable = Array.from(images).map(
+      imageFile => this.uploadImage(imageFile)
+    )
+
+    // forkJoin recibe un array de Observable y espera a que todos emitan exito, si uno falla lanza error
+    return forkJoin(uploadObservable)
+
+  }
+
+  uploadImage( imageFile: File ): Observable<string>{
+    const formData = new FormData()
+    formData.append('file', imageFile)
+
+    return this.http.post<{ fileName: string }>(`${ BASEURL }/files/product`, formData)
+      .pipe(
+        map( resp => resp.fileName )
+      )
+  }
 
 }
