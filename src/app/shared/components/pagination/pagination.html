@@ -1,4 +1,4 @@
-<div class="join flex justify-center items-center mt-4 mb-10">
+<div class="join flex justify-center items-center">
   @for (page of getPageList(); track page) {
     <!--
       En esto [routerLink]="[]" el "[]" indica que navega a la ruta actual,
@@ -7,6 +7,8 @@
     <button
       class="join-item btn"
       [class.btn-primary]="page === activePage()"
+      [class.mt-4]="marginY()"
+      [class.mb-10]="marginY()"
       [routerLink]="[]"
       [queryParams]="{ page }"
       (click)="activePage.set(page)"

@@ -6,11 +6,11 @@
 <div class="divider"></div>
 
 <div class="flex gap-2 items-center h-20">
-  <span>Aquí ira la paginación</span>
-  <!-- <pagination
+  <pagination
     [pages]="productResource.value()?.pages ?? 0"
     [currentPage]="paginationServ.currentPage()"
-  /> -->
+    [marginY]="false"
+  />
   <select class="select select-bordered w-32"
     (change)="productsPerPage.set(+selectPerPage.value)"
     #selectPerPage

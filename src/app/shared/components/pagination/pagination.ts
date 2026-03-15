@@ -11,6 +11,8 @@ export class Pagination {
 
   currentPage = input<number>(1)
 
+  marginY = input<boolean>(false)
+
   activePage = linkedSignal(this.currentPage)
 
   getPageList = computed(
