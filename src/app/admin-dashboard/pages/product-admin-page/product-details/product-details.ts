@@ -25,6 +25,10 @@ export class ProductDetails implements OnInit {
 
   wasSave = signal<boolean>(false)
 
+  imageList: FileList | undefined = undefined
+
+  tempImages = signal<string[]>([])
+
   productForm = this.fb.group({
     title: [ '', Validators.required ],
     description: [ '', Validators.required ],
@@ -98,6 +102,17 @@ export class ProductDetails implements OnInit {
       }, 3000
     )
 
+  }
 
+  onFilesChanged( event: Event ){
+    const fileList = ( event.target as HTMLInputElement ).files
+
+    this.imageList = fileList ?? undefined
+
+    const imageTempUrls = Array.from( fileList ?? [] ).map(
+      file => URL.createObjectURL(file)
+    )
+
+    this.tempImages.set(imageTempUrls)
   }
 }
