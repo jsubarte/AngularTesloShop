@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { IProduct } from '@products/interfaces/iproduct';
 import { ProductCarrousel } from "@products/components/product-carrousel/product-carrousel";
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -6,6 +6,7 @@ import { FormUtils } from '@utils/form-utils';
 import { FormErrorLabel } from "@shared/components/form-error-label/form-error-label";
 import { ProductsService } from '@products/services/products-service';
 import { Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 
 
 @Component({
@@ -21,6 +22,8 @@ export class ProductDetails implements OnInit {
   router = inject(Router)
 
   fb = inject(FormBuilder)
+
+  wasSave = signal<boolean>(false)
 
   productForm = this.fb.group({
     title: [ '', Validators.required ],
@@ -61,7 +64,7 @@ export class ProductDetails implements OnInit {
 
   }
 
-  onSubmit() {
+  async onSubmit() {
     const isValid = this.productForm.valid
     this.productForm.markAllAsTouched() // muestra todos los errores del formulario si los hay
 
@@ -76,21 +79,24 @@ export class ProductDetails implements OnInit {
 
     if( this.product().id === 'new' ){
       // Creamos producto
-      this.productService.createProduct(productLike).subscribe(
-        product => {
-          console.log('Producto creado')
-          this.router.navigate( [ '/admin/products', product.id ] )
-        }
+      const product = await firstValueFrom(
+        this.productService.createProduct(productLike)
       )
+      this.router.navigate( [ '/admin/products', product.id ] )
     }
     else{
       // Actualizamos producto
-      this.productService.updateProduct( this.product().id, productLike ).subscribe(
-        producto => {
-          console.log('Producto actualizado')
-        }
+      await firstValueFrom(
+        this.productService.updateProduct( this.product().id, productLike )
       )
     }
+
+    this.wasSave.set(true)
+    setTimeout(
+      () => {
+        this.wasSave.set(false)
+      }, 3000
+    )
 
 
   }

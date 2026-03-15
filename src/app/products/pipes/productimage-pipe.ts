@@ -10,11 +10,16 @@ const BASEURL = environment.baseUrl
 
 export class ProductImagePipe implements PipeTransform {
   transform( value: string | string[] ): any {
+
+    if (!value) return '/assets/images/no-image.jpg'
+
     if( typeof value === 'string' ) return `${ BASEURL }/files/product/${ value }`
+
+    if( value[0] === '' ) return '/assets/images/no-image.jpg'
 
     const image = value[0]
 
-    if( !image ) return './assets/images/no-image.jpg'
+    if( !image ) return '/assets/images/no-image.jpg'
 
     return `${ BASEURL }/files/product/${ image }`
   }
