@@ -13,6 +13,8 @@ export class ProductImagePipe implements PipeTransform {
 
     if (!value) return '/assets/images/no-image.jpg'
 
+    if( typeof value === 'string' && value.startsWith('blob:') ) return value
+
     if( typeof value === 'string' ) return `${ BASEURL }/files/product/${ value }`
 
     if( value[0] === '' ) return '/assets/images/no-image.jpg'
@@ -22,5 +24,6 @@ export class ProductImagePipe implements PipeTransform {
     if( !image ) return '/assets/images/no-image.jpg'
 
     return `${ BASEURL }/files/product/${ image }`
+    
   }
 }

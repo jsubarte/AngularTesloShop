@@ -127,7 +127,7 @@
       </button>
     </div>
 
-    <product-carrousel [images]="product().images" />
+    <product-carrousel [images]="imagesToCarrousel()" />
 
     <input multiple accept="image/*" type="file" class="file-input file-input-bordered w-full mt-4" (change)="onFilesChanged($event)" />
 
