@@ -76,8 +76,17 @@ export class ProductsService {
   }
 
   createProduct( productLike: Partial<IProduct>, imageFileList?: FileList ): Observable<IProduct> {
-    return this.http.post<IProduct>(`${ BASEURL }/products`, productLike)
+    const currentImages = productLike.images ?? []
+
+    return this.uploadImages( imageFileList )
       .pipe(
+        map( imageName => ({
+          ...productLike,
+          images: [ ...currentImages, ...imageName ]
+        })),
+        switchMap(
+          createdProduct => this.http.post<IProduct>(`${ BASEURL }/products`, createdProduct)
+        ),
         tap( product => this.updateProductCache(product) )
       )
   }
